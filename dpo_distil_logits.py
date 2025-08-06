@@ -16,58 +16,26 @@ import torch.amp as amp
 from torch import nn
 
 
-cfg = {
-    "project_name": "dpo-distil-logit",
-    "dataset": {
-        "name": "Intel/orca_dpo_pairs",
-        "split": "train",
-        "val_split": 0.05,          # % of samples held out for eval
-        "seed": 42,
-    },
-    "models": {
-        "student": "Qwen/Qwen2.5-1.5B-Instruct",
-        "teacher": "Qwen2.5-3B-DPO-intel-orca/merge", # Dpo trained model
-    },
-    "tokenizer": {
-        "pad_side": "left",
-        "chat_template": None,      # keep default that ships with Qwen
-    },
-    "lora": {                       # DPO requires higher Vram so LORA is suitable for consumer based GPUS <= 24GB Vram
-        "r": 16,
-        "alpha": 16,
-        "dropout": 0.05,
-        "target_modules": [
-            "k_proj","v_proj","q_proj","o_proj",
-            "gate_proj", "up_proj", "down_proj"
-        ],
-    },
-    "quant": {
-        "bits": 4,
-        "quant_type": "nf4",
-        "compute_dtype": "bfloat16",
-    },
-    "dpo": {
-        "num_train_epochs": 3,
-        "per_device_batch": 1,
-        "grad_accum": 4,
-        "lr": 5e-5,
-        "logging_steps": 50,
-        "save_steps": 1000,
-        "max_length": 4096,
-        # KD
-        "kd_temperature": 1.0,
-        "kd_weight": 1e-3,
-    },
-    "wandb": {
-        "entity": "my-team",
-        "name": "exp-name",  # run name
-        "tags": ["dpo", "knowledge-distillation"],
-    },
-    "paths": {
-        "output_dir": "path-to-save-ckpts",
-        "final_merged": "final-lora-merged-model",
-    }
-}
+import argparse
+import json
+from config import DPO_CONFIG
+
+def get_config():
+    """
+    Parses command-line arguments to get the configuration.
+    If a config file is specified, it loads the config from the file.
+    Otherwise, it returns the default config.
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", type=str, help="Path to a JSON config file")
+    args = parser.parse_args()
+
+    if args.config:
+        with open(args.config, 'r') as f:
+            return json.load(f)
+    return DPO_CONFIG
+
+cfg = get_config()
 
 
 def flush_left(mask: torch.Tensor, *tensors: torch.Tensor) -> tuple[torch.Tensor, ...]:
