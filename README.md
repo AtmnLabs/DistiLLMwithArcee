@@ -110,6 +110,11 @@ For more information about Arcee.AI and our training platform, visit our website
 
 For technical questions or support, please open an issue in this repository.
 
+GUI Support
+For issues specifically related to the GUI, please contact the AtmnLabs team:
+
+Email: hello@atmnai.com
+Website: atmnAI.com
 Acknowledgments
 While our work is ultimately quite different - this project was inspired by Towards Cross-Tokenizer Distillation: the Universal Logit Distillation Loss for LLMs. We thank the authors for their efforts and contributions. We would like to thank the open-source community and all at arcee.ai who have helped make DistillKit possible. We're just getting started.
 
