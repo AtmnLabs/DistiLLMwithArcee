@@ -1,6 +1,6 @@
 # DistillKit
 
-[Technical Report](https://arcee-ai-distillkit.my.canva.site/)
+[Technical Report](https://www.arcee.ai/blog/announcing-the-arcee-foundation-model-family)
 
 
 ## Overview
@@ -28,19 +28,19 @@ For a quick and easy installation, you can use our setup script:
 
 If you prefer to install dependencies manually, follow these steps:
 
-1. Install basic requirements:
+1. Install PyTorch
    ```bash
-   pip install torch wheel ninja packaging
+   pip install torch
    ```
 
-2. Install Flash Attention:
+2. Install wheel, packaging, and ninja
    ```bash
-   pip install flash-attn
+   pip install wheel packaging ninja
    ```
 
-3. Install DeepSpeed:
+3. Install flash-attn and deepspeed
    ```bash
-   pip install deepspeed
+   pip install flash-attn deepspeed
    ```
 
 4. Install remaining requirements:
@@ -50,10 +50,13 @@ If you prefer to install dependencies manually, follow these steps:
 
 ## Configuration
 
-For simplicity, we've set the config settings directly within the training script. You can customize the configuration as follows:
+The default configurations for the distillation scripts are located in the `config.py` file. You can modify the `LOGITS_CONFIG`, `HIDDEN_CONFIG`, or `DPO_CONFIG` dictionaries in this file to customize the settings for your specific needs.
 
+Alternatively, you can create a `config.json` file and pass it to the training script using the `--config` argument. This allows you to manage your configurations separately without modifying the source code.
+
+Here is an example of the `LOGITS_CONFIG` from `config.py`:
 ```python
-config = {
+LOGITS_CONFIG = {
     "project_name": "distil-logits",
     "dataset": {
         "name": "mlabonne/FineTome-100k", # Only sharegpt format is currently supported.
@@ -151,7 +154,7 @@ Our experiments have shown promising results in both general-purpose and domain-
 - Significant performance gains were observed when distilling models for domain-specific tasks.
 - Using the same training dataset for distillation as was used for the teacher model can lead to higher performance gains.
 
-For detailed results and analysis, please refer to our case studies and experimental here.
+For detailed results and analysis, please refer to our case studies and experimental results, which will be updated soon.
 
 ## Arcee-Labs
 
@@ -159,7 +162,7 @@ This release marks the debut of Arcee-Labs, a division of Arcee.ai dedicated to 
 
 ## Future Directions
 
-We are excited to see how the community will use and improve DistillKit. Future releases will include Continued Pre-Training (CPT) and Direct Preference Optimization (DPO) distillation methods. We welcome community contributions in the form of new distillation methods, training routine improvements, and memory optimizations.
+We are excited to see how the community will use and improve DistillKit. We are continuously working on adding new features, and future releases will include Continued Pre-Training (CPT) distillation methods. We welcome community contributions in the form of new distillation methods, training routine improvements, and memory optimizations.
 
 ## Contributing
 
